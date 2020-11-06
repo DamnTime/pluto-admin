@@ -1,0 +1,71 @@
+{
+  "name": "pluto-admin",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "egg": {
+    "declarations": true
+  },
+  "dependencies": {
+    "axios": "^0.21.0",
+    "basic-auth": "^2.0.1",
+    "bcryptjs": "^2.4.3",
+    "dayjs": "^1.8.36",
+    "egg": "^2.15.1",
+    "egg-jwt": "^3.1.7",
+    "egg-redis": "^2.4.0",
+    "egg-scripts": "^2.11.0",
+    "egg-sequelize": "^6.0.0",
+    "egg-validate-plus": "^1.1.6",
+    "lodash": "^4.17.20",
+    "module-alias": "^2.2.0",
+    "mysql2": "^2.1.0",
+    "qiniu": "^7.2.2"
+  },
+  "devDependencies": {
+    "autod": "^3.0.1",
+    "autod-egg": "^1.1.0",
+    "egg-bin": "^4.11.0",
+    "egg-ci": "^1.11.0",
+    "egg-mock": "^3.21.0",
+    "eslint": "^5.13.0",
+    "eslint-config-egg": "^7.1.0",
+    "inquirer": "^7.3.3",
+    "sequelize-cli": "^6.2.0"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "scripts": {
+    "start": "egg-scripts start --daemon --title=egg-server-pluto-admin",
+    "stop": "egg-scripts stop --title=egg-server-pluto-admin",
+    "dev": "egg-bin dev",
+    "debug": "egg-bin debug",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "test-local": "egg-bin test",
+    "cov": "egg-bin cov",
+    "lint": "eslint .",
+    "ci": "npm run lint && npm run cov",
+    "autod": "autod",
+    "seque": "node scripts/sequelize-cli-helper.js --name user --func add",
+    "updb": "npx sequelize db:migrate",
+    "resetdb": "npx sequelize db:migrate:undo",
+    "resetalldb": "npx sequelize db:migrate:undo:all"
+  },
+  "ci": {
+    "version": "10"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "hl",
+  "license": "MIT",
+  "_moduleAliases": {
+    "@root": ".",
+    "@database": "database",
+    "@core": "app/core",
+    "@utils": "app/utils",
+    "@app": "app"
+  }
+}

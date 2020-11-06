@@ -1,0 +1,38 @@
+{
+  "development": {
+    "dialect": "mysql",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "database": "egg-sequelize-doc-dev",
+    "username": "root",
+    "password": "yogurt328617",
+    "timezone": "+08:00",
+    "define": {
+      "timestamps": true,
+      "paranoid": true,
+      "underscored": true,
+      "freezeTableName": false,
+      "createdAt": "created_at",
+      "updatedAt": "updated_at",
+      "deletedAt": "deleted_at"
+    }
+  },
+  "production": {
+    "dialect": "mysql",
+    "host": "pluto_mysql",
+    "port": 3306,
+    "database": "pluto",
+    "username": "root",
+    "password": "yogurt328617",
+    "timezone": "+08:00",
+    "define": {
+      "timestamps": true,
+      "paranoid": true,
+      "underscored": true,
+      "freezeTableName": true
+    },
+    "dialectOptions": {
+      "dateStrings": true
+    }
+  }
+}
