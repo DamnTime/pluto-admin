@@ -1,73 +1,73 @@
 version: '3'
 
 services:
-pluto_redis:
-image: redis:3                  # 指定服务镜像
-container_name: pluto_redis    # 容器名称
-restart: always                 # 重启方式
-hostname: redis
-command: redis-server /usr/local/etc/redis/redis.conf --requirepass 123456  --appendonly yes
-volumes:                        # 挂载数据卷
-  - ~/home/redis/redis.conf:/usr/local/etc/redis/redis.conf
-ports:                          # 映射端口
-  - "6379:6379"     
-networks:                       # 加入指定网络
-  - app-network
+  pluto_redis:
+    image: redis:3 # 指定服务镜像
+    container_name: pluto_redis # 容器名称
+    restart: always # 重启方式
+    hostname: redis
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass 123456  --appendonly yes
+    volumes: # 挂载数据卷
+      - ~/home/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    ports: # 映射端口
+      - '6379:6379'
+    networks: # 加入指定网络
+      - app-network
 
-pluto_nginx:
-image: nginx:stable-alpine      # 指定服务镜像
-container_name: pluto_nginx    # 容器名称
-restart: always                 # 重启方式
-ports:                          # 映射端口
-  - "80:80"
-  - "8000:8000"
-volumes:                        # 挂载数据卷
-  - /etc/localtime:/etc/localtime
-  - ~/home/nginx/conf.d:/etc/nginx/conf.d
-  - ~/home/nginx/logs:/var/log/nginx
-depends_on:                     # 启动顺序
-  - nodejs
-networks:                       # 加入指定网络
-  - app-network
+  pluto_nginx:
+    image: nginx:stable-alpine # 指定服务镜像
+    container_name: pluto_nginx # 容器名称
+    restart: always # 重启方式
+    ports: # 映射端口
+      - '80:80'
+      - '8000:8000'
+    volumes: # 挂载数据卷
+      - /etc/localtime:/etc/localtime
+      - ~/home/nginx/conf.d:/etc/nginx/conf.d
+      - ~/home/nginx/logs:/var/log/nginx
+    depends_on: # 启动顺序
+      - nodejs
+    networks: # 加入指定网络
+      - app-network
 
-pluto_mysql:
-image: mysql:8.0.16
-container_name: pluto_mysql
-restart: always
-ports:                          # 映射端口
-  - "3306:3306"
-environment:
-  - MYSQL_ROOT_PASSWORD=root
-  - MYSQL_USER=admin           # 创建 lovelp 用户
-  - MYSQL_PASSWORD=yogurt328617     # 设置 lovelp 用户的密码
-  - MYSQL_DATABASE=pluto       # 创建初始数据库
-  - TZ=Asia/Shanghai            # 设置时区
-volumes:                        # 挂载数据卷
-  - ~/home/mysql:/var/lib/mysql  # 为了数据持久化
-command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-networks:                       # 加入指定网络
-  - app-network 
+  pluto_mysql:
+    image: mysql:8.0.16
+    container_name: pluto_mysql
+    restart: always
+    ports: # 映射端口
+      - '3306:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=admin # 创建 lovelp 用户
+      - MYSQL_PASSWORD=yogurt328617 # 设置 lovelp 用户的密码
+      - MYSQL_DATABASE=pluto # 创建初始数据库
+      - TZ=Asia/Shanghai # 设置时区
+    volumes: # 挂载数据卷
+      - ~/home/mysql:/var/lib/mysql # 为了数据持久化
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks: # 加入指定网络
+      - app-network
 
-nodejs:
-build:                          # 这里指的是我们刚刚撸的 Dockerfile 文件
-  context: .                    
-  dockerfile: Dockerfile
-image: nodejs                   # 镜像名称
-container_name: nodejs          # 容器名称
-restart: always                 # 重启方式
-depends_on:                     # 启动顺序
-  - pluto_redis
-  - pluto_mysql
-links:                          # 容器连接
-  - pluto_redis:pluto_redis
-  - pluto_mysql:pluto_mysql
-networks:                       # 加入指定网络
-  - app-network
+  nodejs:
+    build: # 这里指的是我们刚刚撸的 Dockerfile 文件
+      context: .
+      dockerfile: Dockerfile
+    image: nodejs # 镜像名称
+    container_name: nodejs # 容器名称
+    restart: always # 重启方式
+    depends_on: # 启动顺序
+      - pluto_redis
+      - pluto_mysql
+    links: # 容器连接
+      - pluto_redis:pluto_redis
+      - pluto_mysql:pluto_mysql
+    networks: # 加入指定网络
+      - app-network
 
-volumes:
-certbot-etc:
-certbot-var:
+  volumes:
+    certbot-etc:
+    certbot-var:
 
-networks:  # 实现通信
-app-network:
-driver: bridge
+  networks: # 实现通信
+    app-network:
+      driver: bridge
