@@ -27,6 +27,8 @@ RUN npm install --registry=https://registry.npm.taobao.org
 # 拷贝所有源代码到工作目录
 COPY . /root/backend/pluto-admin
 
+ENV NODE_ENV production
+
 # 暴露容器端口
 EXPOSE 7001
 
