@@ -37,7 +37,7 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-pluto-admin",
+    "start": "egg-scripts start",
     "stop": "egg-scripts stop --title=egg-server-pluto-admin",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
