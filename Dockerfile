@@ -1,5 +1,5 @@
 # 镜像版本
-FROM node:12.16.2
+FROM node:12.16.2-alpine
 
 # 设置时区
 RUN apk --update add tzdata \
