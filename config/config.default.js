@@ -16,7 +16,7 @@ module.exports = (appInfo) => {
   config.keys = appInfo.name + '_1600250565685_845';
 
   // add your middleware config here
-  config.middleware = ['exception', 'token'];
+  config.middleware = ['exception'];
 
   config.security = {
     csrf: false,
