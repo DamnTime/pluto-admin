@@ -13,7 +13,7 @@ services:
       - '6379:6379'
 
   pluto_nginx:
-    image: nginx:stable-alpine # 指定服务镜像
+    image: nginx:latest # 指定服务镜像
     container_name: pluto_nginx # 容器名称
     restart: always # 重启方式
     ports: # 映射端口
