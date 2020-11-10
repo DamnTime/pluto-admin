@@ -24,6 +24,7 @@ services:
       - /etc/localtime:/etc/localtime
       - /home/nginx/conf.d:/etc/nginx/conf.d
       - /home/nginx/logs:/var/log/nginx
+      - /home/plutoweb/admin/public:/usr/share/nginx/html
     depends_on: # 启动顺序
       - nodejs
 
