@@ -22,7 +22,7 @@
     "host": "pluto_mysql",
     "port": 3306,
     "database": "pluto",
-    "username": "root",
+    "username": "admin",
     "password": "yogurt328617",
     "timezone": "+08:00",
     "define": {
