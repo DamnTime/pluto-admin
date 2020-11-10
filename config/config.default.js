@@ -26,6 +26,11 @@ module.exports = (appInfo) => {
     secret: '386484304@qq.com',
   };
 
+  exports.alinode = {
+    appid: '86742',
+    secret: 'b48e2e4e70b64caf1859c9d7f57f02222b4d2063',
+  };
+
   config.validatePlus = {
     resolveError(ctx, errors) {
       if (errors.length) {

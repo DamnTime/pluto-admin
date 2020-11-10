@@ -20,3 +20,8 @@ exports.validatePlus = {
   enable: true,
   package: 'egg-validate-plus',
 };
+
+exports.alinode = {
+  enable: true,
+  package: 'egg-alinode',
+};
