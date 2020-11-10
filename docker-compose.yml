@@ -19,9 +19,9 @@ services:
     privileged: true
     ports: # 映射端口
       - '80:80'
-      - '8000:8000'
     volumes: # 挂载数据卷
       - /etc/localtime:/etc/localtime
+      - /home/nginx/conf.d:/etc/nginx/conf.d
       - /home/nginx/logs:/var/log/nginx
     depends_on: # 启动顺序
       - nodejs
