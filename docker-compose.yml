@@ -8,7 +8,7 @@ services:
     hostname: redis
     command: redis-server /usr/local/etc/redis/redis.conf --requirepass 123456  --appendonly yes
     volumes: # 挂载数据卷
-      - ~/home/redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - /home/redis/redis.conf:/usr/local/etc/redis/redis.conf
     ports: # 映射端口
       - '6379:6379'
 
@@ -22,9 +22,9 @@ services:
       - '8000:8000'
     volumes: # 挂载数据卷
       - /etc/localtime:/etc/localtime
-      - ~/home/nginx/conf.d:/etc/nginx/conf.d
-      - ~/home/nginx/logs:/var/log/nginx
-      - /root/frontend/admin/public:/usr/share/nginx/html
+      - /home/nginx/conf.d:/etc/nginx/conf.d
+      - /home/nginx/logs:/var/log/nginx
+      - /home/plutoweb/admin/public:/usr/share/nginx/html
     depends_on: # 启动顺序
       - nodejs
 
@@ -41,7 +41,7 @@ services:
       - MYSQL_DATABASE=pluto # 创建初始数据库
       - TZ=Asia/Shanghai # 设置时区
     volumes: # 挂载数据卷
-      - ~/home/mysql:/var/lib/mysql # 为了数据持久化
+      - /home/mysql:/var/lib/mysql # 为了数据持久化
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
   nodejs:
