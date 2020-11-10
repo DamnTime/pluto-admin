@@ -38,7 +38,7 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start",
+    "start": "npm run updb && egg-scripts start",
     "stop": "egg-scripts stop --title=egg-server-pluto-admin",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
