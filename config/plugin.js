@@ -25,3 +25,8 @@ exports.alinode = {
   enable: true,
   package: 'egg-alinode',
 };
+
+exports.cors = {
+  enable: true,
+  package: 'egg-cors',
+};
