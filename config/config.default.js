@@ -48,9 +48,7 @@ module.exports = (appInfo) => {
   // add your user config here
   const userConfig = {
     userHighestScope: 999, // 用户最高权限
-    token: {
-      ignore: '/admin/login',
-    },
+    tokenIgnore: ['/admin/login', '/web/*'],
   };
 
   return {

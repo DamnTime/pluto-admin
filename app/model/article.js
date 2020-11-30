@@ -18,6 +18,12 @@ module.exports = (app) => {
       foreignKey: 'id',
       targetKey: 'id',
     });
+
+    // 与文章作者多对一关系
+    app.model.Article.belongsTo(app.model.User, {
+      foreignKey: 'authorId',
+      targetKey: 'id',
+    });
   };
 
   return Article;

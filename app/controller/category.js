@@ -4,17 +4,27 @@ const { toInt } = require('@utils/share');
 
 class CategoryController extends Controller {
   async index() {
-    // 分页查询
     const { ctx, app } = this;
     const query = {
-      ...ctx.helper.handlePageQuery(),
       include: {
         model: app.model.Article,
         limit: 5,
       },
     };
-    ctx.body = ctx.helper.handlePagenationRes(
-      await ctx.model.Category.findAndCountAll(query)
+    const result = await ctx.model.Category.findAll(query);
+    ctx.helper.successRes(
+      '分类列表',
+      result
+    );
+  }
+
+  // web前端-获取所有分类
+  async getAllCatesForWeb() {
+    const { ctx } = this;
+    const result = await ctx.model.Category.findAll();
+    ctx.helper.successRes(
+      '分类列表',
+      result
     );
   }
 

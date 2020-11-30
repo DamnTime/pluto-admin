@@ -1,14 +1,20 @@
 const Controller = require('egg').Controller;
+const { Op } = require('sequelize');
+const { defaultTimeSearch } = require('@core/config');
 const articleModel = require('@database/article');
 const { toInt } = require('@utils/share');
 
 class ArticleController extends Controller {
   async index() {
-    // 分页查询
+    await this.handleSearchArticle();
+  }
+
+  // web前端-分页获取对应分类下的文章
+  async getArticleByCateForWeb() {
     const { ctx, app } = this;
     const query = {
       ...ctx.helper.handlePageQuery(),
-      ...ctx.helper.handleConditionSearch([{ key: 'title', fuzzy: true }]),
+      ...ctx.helper.handleConditionSearch(['categoryId']),
       include: {
         model: app.model.ArticleTag,
       },
@@ -20,11 +26,72 @@ class ArticleController extends Controller {
     );
   }
 
+  // 获取最新的文章
+  async getArticlesLatesForWeb() {
+    const { ctx, app } = this;
+    const query = {
+      ...ctx.helper.handlePageQuery(),
+      where: {
+        publishTime: {
+          [Op.lte]: defaultTimeSearch.startTime,
+          [Op.gte]: defaultTimeSearch.endTime,
+        },
+      },
+      include: {
+        model: app.model.ArticleTag,
+      },
+    };
+    const articles = await ctx.model.Article.findAndCountAll(query);
+    ctx.helper.successRes(
+      '获取文章列表成功',
+      ctx.helper.handlePagenationRes(articles)
+    );
+  }
+
+  // web端获取文章详情
+  async fetchArticleDetailForWeb() {
+    const { ctx, app } = this;
+    const result = await ctx.model.Article.findOne({
+      where: {
+        id: toInt(ctx.params.id || ctx.query.id),
+      },
+      include: [{
+        model: app.model.User,
+        attributes: { exclude: ['passWord'] },
+      }, {
+        model: app.model.ArticleTag,
+      }],
+    });
+    ctx.helper.successRes('获取文章详情', result);
+  }
+
+  // web端分页搜索文章列表
+  async fetchSearchArticleForWeb() {
+    await this.handleSearchArticle();
+  }
+
+  async handleSearchArticle() {
+    const { ctx, app } = this;
+    const query = {
+      ...ctx.helper.handlePageQuery(),
+      ...ctx.helper.handleConditionSearch([{ key: 'title', fuzzy: true }]),
+      include: {
+        model: app.model.ArticleTag,
+      },
+    };
+    const articles = await ctx.model.Article.findAndCountAll(query);
+    const result = ctx.helper.handlePagenationRes(articles);
+    ctx.helper.successRes(
+      '获取文章列表成功',
+      result
+    );
+  }
+
   async show() {
     const { ctx, app } = this;
     const result = await ctx.model.Article.findOne({
       where: {
-        id: toInt(ctx.params.id),
+        id: toInt(ctx.params.id || ctx.query.id),
       },
       include: {
         model: app.model.ArticleTag,
@@ -52,7 +119,7 @@ class ArticleController extends Controller {
   async create() {
     const { ctx, app } = this;
 
-    const bodyParams = this.validateParams();
+    const bodyParams = await this.validateParams();
 
     if (!bodyParams) return;
 

@@ -1,7 +1,14 @@
+const dayjs = require('dayjs');
 // 分页参数配置
 const pagenation = {
   page: 1,
-  pageSize: 10,
+  pageSize: 5,
+};
+
+// 默认时间查询范围
+const defaultTimeSearch = {
+  startTime: dayjs().valueOf(),
+  endTime: dayjs().subtract(6, 'month').valueOf(),
 };
 
 // 系统权限
@@ -26,4 +33,5 @@ module.exports = {
   systemLevel,
   qiniu,
   defaultPwd,
+  defaultTimeSearch,
 };

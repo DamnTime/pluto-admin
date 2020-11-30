@@ -14,6 +14,11 @@ module.exports = (app) => {
       foreignKey: 'userId',
       otherKey: 'userTagId',
     });
+
+    app.model.User.hasMany(app.model.Article, {
+      foreignKey: 'authorId',
+      targetKey: 'id',
+    });
   };
 
   return User;
