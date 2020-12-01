@@ -26,6 +26,7 @@ services:
       - /home/nginx/nginx.conf:/etc/nginx/nginx.conf
       - /home/nginx/logs:/var/log/nginx
       - /home/plutoweb/admin/public:/home/plutoweb/admin/public
+      - /home/plutoweb/client/public:/home/plutoweb/client/public
     depends_on: # 启动顺序
       - nodejs
 
