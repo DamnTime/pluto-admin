@@ -18,12 +18,16 @@ module.exports = (appInfo) => {
   // add your middleware config here
   config.middleware = ['exception'];
 
-  config.security = {
-    csrf: false,
-  };
-
   config.jwt = {
     secret: '386484304@qq.com',
+  };
+
+  config.security = {
+    csrf: {
+      enable: false,
+      ignoreJSON: true,
+    },
+    domainWhiteList: ['*'],
   };
 
   config.cors = {
