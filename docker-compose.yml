@@ -18,7 +18,6 @@ services:
     restart: always # 重启方式
     privileged: true
     ports: # 映射端口
-      - '80:80'
       - '8000:8000'
     volumes: # 挂载数据卷
       - /etc/localtime:/etc/localtime
