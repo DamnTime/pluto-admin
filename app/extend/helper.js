@@ -4,7 +4,7 @@ const { Op } = require('sequelize');
 const { RESPONSE_CODE } = require('@core/enums');
 const { pagenation } = require('@core/config');
 const { toInt } = require('@utils/share');
-const { resBaseModel } = require('@utils/helper');
+const { resBaseModel, dataType } = require('@utils/helper');
 
 module.exports = {
   // 响应成功
@@ -87,21 +87,36 @@ module.exports = {
     };
     return result;
   },
-  // 条件搜索
+  /**
+   * 条件搜索
+   * @param {*} conditions 为一个数组
+   * 数组每一项可为 string类型 可为对象类型
+   * string时 自动从query中获取前端传入的搜索条件
+   * 其中对象类型 {key:xxx,fuzzy:true} 此为xxx的模糊搜索
+   * {key:xxx,value:xxx} 为指定搜索条件
+   */
   handleConditionSearch(conditions = []) {
     const condition = {};
     const { query = {} } = this.ctx;
     conditions.forEach((c) => {
-      const isObject = typeof c === 'object';
+      const isObject = dataType(c, 'object');
       if (isObject && c.fuzzy && query[c.key]) {
         condition.where = {
+          ...(condition.where || {}),
           [c.key]: {
             [Op.like]: `%${query[c.key]}%`,
           },
         };
       }
+      if (isObject && c.value) {
+        condition.where = {
+          ...(condition.where || {}),
+          [c.key]: c.value,
+        };
+      }
       if (!isObject && query[c]) {
         condition.where = {
+          ...(condition.where || {}),
           [c]: isNaN(+query[c]) ? query[c] : +query[c],
         };
       }

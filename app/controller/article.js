@@ -14,7 +14,10 @@ class ArticleController extends Controller {
     const { ctx, app } = this;
     const query = {
       ...ctx.helper.handlePageQuery(),
-      ...ctx.helper.handleConditionSearch(['categoryId']),
+      ...ctx.helper.handleConditionSearch([
+        'categoryId',
+        { key: 'status', value: 1 },
+      ]),
       include: {
         model: app.model.ArticleTag,
       },
@@ -36,6 +39,7 @@ class ArticleController extends Controller {
           [Op.lte]: defaultTimeSearch.startTime,
           [Op.gte]: defaultTimeSearch.endTime,
         },
+        status: 1,
       },
       include: {
         model: app.model.ArticleTag,
@@ -55,36 +59,38 @@ class ArticleController extends Controller {
       where: {
         id: toInt(ctx.params.id || ctx.query.id),
       },
-      include: [{
-        model: app.model.User,
-        attributes: { exclude: ['passWord'] },
-      }, {
-        model: app.model.ArticleTag,
-      }],
+      include: [
+        {
+          model: app.model.User,
+          attributes: { exclude: ['passWord'] },
+        },
+        {
+          model: app.model.ArticleTag,
+        },
+      ],
     });
     ctx.helper.successRes('获取文章详情', result);
   }
 
   // web端分页搜索文章列表
   async fetchSearchArticleForWeb() {
-    await this.handleSearchArticle();
+    await this.handleSearchArticle([{ key: 'status', value: 1 }]);
   }
 
-  async handleSearchArticle() {
+  async handleSearchArticle(condition = []) {
     const { ctx, app } = this;
     const query = {
       ...ctx.helper.handlePageQuery(),
-      ...ctx.helper.handleConditionSearch([{ key: 'title', fuzzy: true }]),
+      ...ctx.helper.handleConditionSearch(
+        [{ key: 'title', fuzzy: true }].concat(condition)
+      ),
       include: {
         model: app.model.ArticleTag,
       },
     };
     const articles = await ctx.model.Article.findAndCountAll(query);
     const result = ctx.helper.handlePagenationRes(articles);
-    ctx.helper.successRes(
-      '获取文章列表成功',
-      result
-    );
+    ctx.helper.successRes('获取文章列表成功', result);
   }
 
   async show() {
