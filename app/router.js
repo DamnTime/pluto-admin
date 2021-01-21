@@ -11,4 +11,5 @@ module.exports = (app) => {
   require('./router/category')(app);
   require('./router/article')(app);
   require('./router/common')(app);
+  require('./router/comment')(app);
 };

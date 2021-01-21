@@ -54,7 +54,13 @@ const toInt = (str) => {
   return parseInt(str, 10) || 0;
 };
 
+// 非空
+const isNotEmpty = (str) => {
+  return str !== null && str !== undefined;
+};
+
 module.exports = {
   transformLine,
   toInt,
+  isNotEmpty,
 };

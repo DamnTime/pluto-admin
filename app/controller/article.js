@@ -14,19 +14,13 @@ class ArticleController extends Controller {
     const { ctx, app } = this;
     const query = {
       ...ctx.helper.handlePageQuery(),
-      ...ctx.helper.handleConditionSearch([
-        'categoryId',
-        { key: 'status', value: 1 },
-      ]),
+      ...ctx.helper.handleConditionSearch(['categoryId', { key: 'status', value: 1 }]),
       include: {
         model: app.model.ArticleTag,
       },
     };
     const articles = await ctx.model.Article.findAndCountAll(query);
-    ctx.helper.successRes(
-      '获取文章列表成功',
-      ctx.helper.handlePagenationRes(articles)
-    );
+    ctx.helper.successRes('获取文章列表成功', ctx.helper.handlePagenationRes(articles));
   }
 
   // 获取最新的文章
@@ -46,10 +40,7 @@ class ArticleController extends Controller {
       },
     };
     const articles = await ctx.model.Article.findAndCountAll(query);
-    ctx.helper.successRes(
-      '获取文章列表成功',
-      ctx.helper.handlePagenationRes(articles)
-    );
+    ctx.helper.successRes('获取文章列表成功', ctx.helper.handlePagenationRes(articles));
   }
 
   // web端获取文章详情
@@ -77,13 +68,27 @@ class ArticleController extends Controller {
     await this.handleSearchArticle([{ key: 'status', value: 1 }]);
   }
 
+  // web端更新文章阅读数
+  async updataArticlePreviewNumber() {
+    const { body } = this.ctx.request;
+    await this.ctx.model.Article.update(
+      {
+        pageView: body.pageView,
+      },
+      {
+        where: {
+          id: body.id,
+        },
+      }
+    );
+    this.ctx.helper.successRes('更新文章阅读数', null);
+  }
+
   async handleSearchArticle(condition = []) {
     const { ctx, app } = this;
     const query = {
       ...ctx.helper.handlePageQuery(),
-      ...ctx.helper.handleConditionSearch(
-        [{ key: 'title', fuzzy: true }].concat(condition)
-      ),
+      ...ctx.helper.handleConditionSearch([{ key: 'title', fuzzy: true }].concat(condition)),
       include: {
         model: app.model.ArticleTag,
       },

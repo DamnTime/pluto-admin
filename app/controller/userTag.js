@@ -11,10 +11,13 @@ class UserTagController extends Controller {
       ...ctx.helper.handleConditionSearch([{ key: 'tagName', fuzzy: true }]),
     };
     const userTags = await ctx.model.UserTag.findAndCountAll(query);
-    ctx.helper.successRes(
-      '获取用户标签列表成功',
-      ctx.helper.handlePagenationRes(userTags)
-    );
+    ctx.helper.successRes('获取用户标签列表成功', ctx.helper.handlePagenationRes(userTags));
+  }
+
+  // client端获取所有标签
+  async fetchAllTagsByWeb() {
+    const { ctx } = this;
+    ctx.helper.successRes('用户标签列表', await ctx.model.UserTag.findAll());
   }
 
   // 搜索用户标签 不需要分页
@@ -23,18 +26,12 @@ class UserTagController extends Controller {
     const query = {
       ...ctx.helper.handleConditionSearch([{ key: 'tagName', fuzzy: true }]),
     };
-    ctx.helper.successRes(
-      '用户标签列表',
-      await ctx.model.UserTag.findAll(query)
-    );
+    ctx.helper.successRes('用户标签列表', await ctx.model.UserTag.findAll(query));
   }
 
   async show() {
     const ctx = this.ctx;
-    ctx.helper.successRes(
-      '获取用户标签详情',
-      await ctx.model.UserTag.findByPk(toInt(ctx.params.id))
-    );
+    ctx.helper.successRes('获取用户标签详情', await ctx.model.UserTag.findByPk(toInt(ctx.params.id)));
   }
 
   async create() {
@@ -80,9 +77,7 @@ class UserTagController extends Controller {
     });
     if ((hasTagInUserComposeUserTag || []).length > 0) {
       const ids = hasTagInUserComposeUserTag.map((i) => i.userId);
-      return ctx.helper.generalExceptionRes(
-        `该用户标签正在被id为 ${ids.join('、')} 的用户使用, 不能删除`
-      );
+      return ctx.helper.generalExceptionRes(`该用户标签正在被id为 ${ids.join('、')} 的用户使用, 不能删除`);
     }
     await userTag.destroy();
     ctx.helper.successRes('删除用户标签成功');

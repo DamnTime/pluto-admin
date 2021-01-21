@@ -5,4 +5,5 @@ module.exports = (app) => {
   router.get('/web/getArticleLatest', controller.article.getArticlesLatesForWeb);
   router.get('/web/getArticleDetail', controller.article.fetchArticleDetailForWeb);
   router.get('/web/searchArticle', controller.article.fetchSearchArticleForWeb);
+  router.post('/web/updateArticlePageNum', controller.article.updataArticlePreviewNumber);
 };

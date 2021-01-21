@@ -24,6 +24,12 @@ module.exports = (app) => {
       foreignKey: 'authorId',
       targetKey: 'id',
     });
+
+    // 与文章评论多对一关系
+    app.model.Article.hasMany(app.model.Comment, {
+      foreignKey: 'articleId',
+      targetKey: 'id',
+    });
   };
 
   return Article;
