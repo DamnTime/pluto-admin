@@ -1,6 +1,7 @@
 require('module-alias/register');
 const bcrypt = require('bcryptjs');
 const Controller = require('egg').Controller;
+const { tokenExpiresIn } = require('@core/config');
 
 class LoginController extends Controller {
   async index() {
@@ -19,20 +20,12 @@ class LoginController extends Controller {
     if (!correct) {
       return ctx.helper.generalExceptionRes('账号或密码不正确');
     }
-
-    // 下发token
-    const token = app.jwt.sign(
-      {
-        account,
-      },
-      app.config.jwt.secret,
-      {
-        expiresIn: '60m',
-      }
-    );
+    const token = await ctx.helper.createToken(account);
     user.token = token;
     delete user.passWord;
     await app.redis.set('userInfo', JSON.stringify(user));
+    // 设置token
+    await ctx.helper.writeTokenInCookie(token);
     ctx.helper.successRes('登录成功', user);
   }
   // client端登录

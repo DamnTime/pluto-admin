@@ -28,10 +28,14 @@ const qiniu = {
 // 用户默认密码
 const defaultPwd = '123456';
 
+// token 过期时间=>"120"等于"120ms"
+const tokenExpiresIn = 60 * 60 * 3;
+
 module.exports = {
   pagenation,
   systemLevel,
   qiniu,
   defaultPwd,
   defaultTimeSearch,
+  tokenExpiresIn,
 };

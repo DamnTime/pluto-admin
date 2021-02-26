@@ -2,7 +2,7 @@ require('module-alias/register');
 const _ = require('lodash');
 const { Op } = require('sequelize');
 const { RESPONSE_CODE } = require('@core/enums');
-const { pagenation } = require('@core/config');
+const { pagenation, tokenExpiresIn } = require('@core/config');
 const { toInt } = require('@utils/share');
 const { resBaseModel, dataType } = require('@utils/helper');
 
@@ -59,11 +59,9 @@ module.exports = {
       request: { body = {} },
     } = this.ctx;
     const offset = toInt(query.page) || toInt(body.page) || pagenation.page;
-    const limit =
-      toInt(query.pageSize) || toInt(body.pageSize) || pagenation.pageSize;
+    const limit = toInt(query.pageSize) || toInt(body.pageSize) || pagenation.pageSize;
     return {
-      limit:
-        toInt(query.pageSize) || toInt(body.pageSize) || pagenation.pageSize,
+      limit: toInt(query.pageSize) || toInt(body.pageSize) || pagenation.pageSize,
       offset: (offset - 1) * limit,
       distinct: true,
     };
@@ -76,8 +74,7 @@ module.exports = {
     } = this.ctx;
     const { count: total, rows: list } = params || {};
     const page = toInt(query.page) || toInt(body.page) || pagenation.page;
-    const pageSize =
-      toInt(query.pageSize) || toInt(body.pageSize) || pagenation.pageSize;
+    const pageSize = toInt(query.pageSize) || toInt(body.pageSize) || pagenation.pageSize;
     const result = {
       total,
       list,
@@ -122,5 +119,30 @@ module.exports = {
       }
     });
     return condition;
+  },
+
+  // 创建token
+  async createToken(account) {
+    const { app } = this;
+    const token = app.jwt.sign(
+      {
+        account,
+      },
+      app.config.jwt.secret,
+      {
+        expiresIn: tokenExpiresIn,
+      }
+    );
+    return token;
+  },
+  // token 写入cookie
+  async writeTokenInCookie(data) {
+    const { ctx } = this;
+    ctx.cookies.set('_token', data, {
+      httpOnly: true,
+      maxAge: tokenExpiresIn * 60 * 60 * 1000,
+      encrypt: false,
+      // domain: 'pluto1811.com',
+    });
   },
 };
