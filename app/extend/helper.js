@@ -140,7 +140,7 @@ module.exports = {
     const { ctx } = this;
     ctx.cookies.set('_token', data, {
       httpOnly: true,
-      maxAge: tokenExpiresIn * 60 * 60 * 1000,
+      maxAge: -1,
       encrypt: false,
       // domain: 'pluto1811.com',
     });
