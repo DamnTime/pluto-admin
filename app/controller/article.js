@@ -92,6 +92,7 @@ class ArticleController extends Controller {
       include: {
         model: app.model.ArticleTag,
       },
+      order: [['publishTime']],
     };
     const articles = await ctx.model.Article.findAndCountAll(query);
     const result = ctx.helper.handlePagenationRes(articles);

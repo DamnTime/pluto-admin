@@ -10,22 +10,19 @@ class CategoryController extends Controller {
         model: app.model.Article,
         limit: 5,
       },
+      order: [['sortNo']],
     };
     const result = await ctx.model.Category.findAll(query);
-    ctx.helper.successRes(
-      '分类列表',
-      result
-    );
+    ctx.helper.successRes('分类列表', result);
   }
 
   // web前端-获取所有分类
   async getAllCatesForWeb() {
     const { ctx } = this;
-    const result = await ctx.model.Category.findAll();
-    ctx.helper.successRes(
-      '分类列表',
-      result
-    );
+    const result = await ctx.model.Category.findAll({
+      order: [['sortNo']],
+    });
+    ctx.helper.successRes('分类列表', result);
   }
 
   // 搜索文章分类
@@ -33,16 +30,14 @@ class CategoryController extends Controller {
     const { ctx } = this;
     const query = {
       ...ctx.helper.handleConditionSearch([{ key: 'name', fuzzy: true }]),
+      order: [['sortNo']],
     };
     ctx.helper.successRes('文章分类', await ctx.model.Category.findAll(query));
   }
 
   async show() {
     const ctx = this.ctx;
-    ctx.helper.successRes(
-      '',
-      await ctx.model.Category.findByPk(toInt(ctx.params.id))
-    );
+    ctx.helper.successRes('', await ctx.model.Category.findByPk(toInt(ctx.params.id)));
   }
 
   async create() {
@@ -71,6 +66,15 @@ class CategoryController extends Controller {
     }
     await category.update(ctx.helper.getBodyParams(categoryModel()));
     ctx.helper.successRes();
+  }
+
+  // 更新排序
+  async updateSort() {
+    const { ctx } = this;
+    const { body } = ctx.request;
+    const params = body.sorts;
+    await ctx.model.Category.bulkCreate(params, { updateOnDuplicate: ['sortNo'] });
+    ctx.helper.successRes('更新排序成功');
   }
 
   async destroy() {
