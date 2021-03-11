@@ -58,7 +58,7 @@ module.exports = {
       query = {},
       request: { body = {} },
     } = this.ctx;
-    const offset = toInt(query.page) || toInt(body.page) || pagenation.page;
+    const offset = toInt(query.current) || toInt(body.current) || pagenation.current;
     const limit = toInt(query.pageSize) || toInt(body.pageSize) || pagenation.pageSize;
     return {
       limit: toInt(query.pageSize) || toInt(body.pageSize) || pagenation.pageSize,
