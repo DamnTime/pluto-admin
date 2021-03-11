@@ -73,12 +73,12 @@ module.exports = {
       request: { body = {} },
     } = this.ctx;
     const { count: total, rows: list } = params || {};
-    const page = toInt(query.page) || toInt(body.page) || pagenation.page;
+    const current = toInt(query.current) || toInt(body.current) || pagenation.current;
     const pageSize = toInt(query.pageSize) || toInt(body.pageSize) || pagenation.pageSize;
     const result = {
       total,
       list,
-      page,
+      current,
       pageSize,
       totalPage: _.ceil(total / pageSize),
     };
