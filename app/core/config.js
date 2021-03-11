@@ -1,7 +1,7 @@
 const dayjs = require('dayjs');
 // 分页参数配置
 const pagenation = {
-  page: 1,
+  current: 1,
   pageSize: 5,
 };
 

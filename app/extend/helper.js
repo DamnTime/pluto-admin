@@ -61,7 +61,7 @@ module.exports = {
     const offset = toInt(query.current) || toInt(body.current) || pagenation.current;
     const limit = toInt(query.pageSize) || toInt(body.pageSize) || pagenation.pageSize;
     return {
-      limit: toInt(query.pageSize) || toInt(body.pageSize) || pagenation.pageSize,
+      limit,
       offset: (offset - 1) * limit,
       distinct: true,
     };
